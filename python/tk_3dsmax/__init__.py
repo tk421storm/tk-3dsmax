@@ -16,7 +16,7 @@ from .menu_generation import MenuGenerator
 from .maxscript import MaxScript
 from .warning_dialog import WarningDialog
 
-import MaxPlus, pymxs #@UnresolvedImport
+import pymxs #@UnresolvedImport
 
 logger = sgtk.LogManager.get_logger(__name__)
 
@@ -140,7 +140,10 @@ def tank_ensure_callbacks_registered(engine=None):
     #if engine.get_setting("automatic_context_switch"):
     if not g_tank_callbacks_registered:
         logger.debug("SGTK Registering onLoad callback")
-        MaxPlus.NotificationManager.Register(MaxPlus.NotificationCodes.FilePostOpen, PostOpenProcess)
+        #max plus is no longer supported in 2021
+        #MaxPlus.NotificationManager.Register(MaxPlus.NotificationCodes.FilePostOpen, PostOpenProcess)
+        pymxs.runtime.callbacks.addScript(pymxs.runtime.Name('filePostOpen'), PostOpenProcess, id=pymxs.runtime.Name('MyListenerCallbacks'))
+        
         g_tank_callbacks_registered = True
     #else:
         # we have an engine but the automatic context switching has been disabled, we should ensure the callbacks
